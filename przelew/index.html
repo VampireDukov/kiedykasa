@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Kiedy przyjdzie przelew?</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="styles/css.css">
+	<link rel="stylesheet" type="text/css" href="slick.css"/>
+	<link rel="stylesheet" type="text/css" href="slick-theme.css"/>
+	<link href='http://fonts.googleapis.com/css?family=Alegreya+Sans&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+
+	<link href='http://fonts.googleapis.com/css?family=Alfa+Slab+One&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Roboto+Slab&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src=jqui.js></script>
+</head>
+<body>
+<header>
+	<h1>Kiedy dostaniesz pieniądze na konto? Sprawdź!!</h1>
+	
+</header>
+<content>
+	<h3>Najpierw wybierz bank z którego przelew wychodzi, następnie cel, a na końcu godzinę. Gdy godzina przyjścia przelewu jest wcześniejsza niż podana to znaczy, <br>
+		że przelew przyjdzie o podanej godzinie, ale następnego dnia.</h3>
+	<div class="area">
+
+		<div id="inslide" class="logo"><img id="inlogo" class="logo" src="images/pko.jpg"></div>
+		<div class="timer">
+			<div class="block time hour">
+				<div class="clicker hup"><img class="arrows" src="images/arrowup.png"></div><div><span id="hour" class="hour"></span></div><div class="clicker hbo"><img class="arrows" src="images/arrowdown.png"></div>
+			</div>
+			<div class="block time hour">
+				<span class="clicker mup"><img class="arrows" src="images/arrowup.png"></span><span id="minutes" class="hour"></span><span class="clicker mbo"><img class="arrows" src="images/arrowdown.png"></span>
+			</div>
+		</div>	
+		<div  id="outslide"  class="logo"><img class="logo" id="outlogo" src="images/alior.jpg"></div>
+	</div>	
+	<div class="hourinfo"><h3>Przelew powinien dojść o <span id="target" class="target">15.00</span></h3></div>
+	<div id='modal' class="modal">
+		<div id="slider" class="slider">
+		</div>
+	</div>
+	<div id='modal1' class="modal1">
+		<div id="slider1" class="slider1">
+			</div>
+	</div>
+</content>
+<script type="text/javascript" src="slick.min.js"></script>
+<script type="text/javascript">
+
+	
+	var slider = document.getElementById('slider');
+	var slider1 = document.getElementById('slider1');	
+	var index;
+	var modal = document.getElementById('modal');
+	var modal1 = document.getElementById('modal1');
+	var target = document.getElementById('target');
+	var hour = document.getElementById('hour');
+	var minutes = document.getElementById('minutes');
+
+	var banks = ['pko','alior', 'bps', 'bph','millenium','pekao','pocztowy','bzwbk','bgk','bgzbnp','biz','bos','citi','creditag','dbank', 'dnb', 'dzbank','eurobank','getin','hsbc','idea','ing','inteligo','mbank','meritum','nest','noble','nordea','raiffeisen'];
+	var time = {hour:12,
+				minutes:leadingZero(0),
+				upHour: function(){
+					if(this.hour >= 23)
+						this.hour = leadingZero(0);
+						
+					else
+					{
+
+						var h = parseInt(this.hour);
+						h++;
+						h = leadingZero(h);
+						this.hour = h;
+					}
+				},
+				downHour: function(){
+					if(this.hour < 1 )
+						this.hour = 23;
+					else{	 
+						var h = parseInt(this.hour);
+						h--;
+						h = leadingZero(h);
+						this.hour = h;
+					}
+				},
+
+
+
+				//zmiana na minuty
+				upMinutes: function(){
+					if(this.minutes >= 59)
+						this.minutes = leadingZero(0);
+						
+					else
+					{
+
+						var h = parseInt(this.minutes);
+						h++;
+						h = leadingZero(h);
+						this.minutes = h;
+					}
+				},
+				downMinutes: function(){
+					if(this.minutes == 0 )
+						this.minutes = '59';
+					else{	 
+						var h = parseInt(this.minutes);
+						h--;
+						h = leadingZero(h);
+						this.minutes = h;
+					}
+				}};
+
+			
+	var pko = {
+		output_session: [8, 11.45, 14.30],
+		input_session: [11.30, 15.10, 17.30],
+		isCheck: function(){
+			this.check = true;
+		}	
+	}
+
+
+	var alior = {
+		
+		output_session: [9.30, 11.30, 16],
+		input_session: [11, 15, 17],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+	//uzupełnić sesje
+	var bph = {
+		
+		output_session: [10.30, 14.30, 17],
+		input_session: [12, 16, 18],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var bps = {
+		
+		output_session: [14.30],
+		input_session: [12, 16, 18],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+//dd
+	var millenium = {
+		
+		output_session: [10.30, 14.30, 17],
+		input_session: [12, 16, 18],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var pekao = {
+		
+		output_session: [8.30,12.30,15],
+		input_session: [11, 15, 17.30],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var pocztowy = {
+		
+		output_session: [9,13,15],
+		input_session: [11, 15, 17.3],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var bzwbk = {
+		
+		output_session: [8.15, 12.15, 14.45],
+		input_session: [8, 18],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var bgk = {
+		
+		output_session: [8.45,12,15.1],
+		input_session: [10.3, 14.3, 17],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var bgzbnp = {
+		
+		output_session: [8,11.45,14.15],
+		input_session: [11,14.3,17],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var biz = {
+		
+		output_session: [8.3,11.30,14],
+		input_session: [11.3, 15.3, 17],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var bos = {
+		
+		output_session: [9.30,13.3,16],
+		input_session: [11, 15, 17.3],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var citi = {
+		
+		output_session: [8,12.15,15.3],
+		input_session: [10.3, 14.3, 17.3],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var creditag = {
+		
+		output_session: [14.30],
+		input_session: [12, 16, 18],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var dbank = {
+		
+		output_session: [7.45,12,15],
+		input_session: [11, 15, 17],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var dnb = {
+		
+		output_session: [8,12,14.3],
+		input_session: [11,15,17.3],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var dzbank = {
+		
+		output_session: [8,12,14.3],
+		input_session: [11,15,17],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var eurobank = {
+		
+		output_session: [7.3,11.3,14.3],
+		input_session: [11,15,17],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var getin = {
+		
+		output_session: [8.15,12.15,14.3],
+		input_session: [10,14,17],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var hsbc = {
+		
+		output_session: [8,12,14.3],
+		input_session: [10,14,16],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var idea = {
+		
+		output_session: [9.3,13.3,16],
+		input_session: [10.3,14.3,16.3],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var ing = {
+		
+		output_session: [8.10,11.3,14.3],
+		input_session: [11,15,17.3],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var inteligo = {
+		
+		output_session: [8,11.45,14.3],
+		input_session: [11.3,15.1,17.1],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var mbank = {
+		
+		output_session: [5.55,9.55,13.25],
+		input_session: [11.15,15,18.15],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+	var meritum = {
+		
+		output_session: [8.30,12.3,15],
+		input_session: [10.3,14.3],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+	var nest = {
+		
+		output_session: [8,11.3,14],
+		input_session: [11.3,15.3,17.3],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+	var noble = {
+		
+		output_session: [8.15,12.15,14.3],
+		input_session: [10,14,17],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+	var nordea = {
+		
+		output_session: [8.30,11.5,14.3],
+		input_session: [10.45,14.45,17.15],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+	var raiffeisen = {
+		
+		output_session: [8,12.15,15],
+		input_session: [10.3,14.3,17.3],
+		isCheck: function(){
+			this.check = true;
+		}
+	}
+
+
+
+	var id = pko;
+	var id2 = alior;
+	function leadingZero(arg1) {
+        return (arg1 < 10)? '0'+arg1 : arg1;
+    }
+    function slideDown(arg1, arg2){
+    	$(arg1).hide('slide', {direction: 'down'}, 'fast', function(){
+    		switch	(arg2){
+    			case 'hours':
+    			time.upHour();
+    			hour.innerHTML = time.hour;
+    			break;
+    			case 'minutes':
+    			time.upMinutes();
+				minutes.innerHTML = time.minutes;
+				break;
+    		}
+    			
+		});
+    	$(arg1).show('slide', {direction: 'up'});
+    }
+    function slideUp(arg1, arg2){
+    
+    	$(arg1).hide('slide' ,{direction: 'up'}, 'fast',  function(){
+    		switch	(arg2){
+    			case 'hours':
+    			time.downHour();
+    			hour.innerHTML = time.hour;
+    			break;
+    			case 'minutes':
+    			time.downMinutes();
+				minutes.innerHTML = time.minutes;
+				break;
+    		}
+    			
+		});
+    	$(arg1).show('slide', {direction:'down'});	
+    	
+    
+    }
+   
+    function checkHour(arg1, arg2, arg3){
+    	var arrive;
+    	var outhour = arg2;
+    	var length = arg1.output_session.length;
+    	if (outhour >= arg1.output_session[length-1]) {
+    		outhour = arg1.output_session[0];
+
+    	}
+    	else{
+
+    		for (var i = 0; i < length; i++){
+    			if (outhour <= arg1.output_session[i]) {	
+    				outhour =  arg1.output_session[i];
+    				break;
+    			}	
+    		}
+    	}	
+   	
+    	for (var i = 0; i < bph.input_session.length; i++){
+ 			if (outhour < arg3.input_session[i]) {
+    			arrive = arg3.input_session[i];
+    		break;
+
+    		}	
+    	}
+    	target.textContent = arrive.toFixed(2);
+    }	
+    
+   	
+
+   function fillSlides(x){
+
+   		var image;
+   		var element;
+   		var slide;
+   		var slider;
+   		var clone;
+   		
+
+			
+   		switch (x){
+
+   			case 'in':
+   					
+ 			slider = document.getElementById('slider');
+ 			var cls ='slide'
+ 			var imgclass = 'imgslide';
+
+   		
+   			
+   			break;
+
+   			case 'out':
+   			var cls ='slide1'
+   			slider = document.getElementById('slider1');
+   			var imgclass = 'imgslide1';
+   			
+   			break;
+
+   		}
+   				for (var i=0; i <= banks.length ; i++){
+   					element = document.createElement('div');
+   					
+   					element.classList.add(cls);
+   					slide = document.createElement('img');
+   					slide.classList.add(imgclass);
+   					slide.classList.add('logo');
+   					slide.src = 'images/'+banks[i]+'.jpg';
+   					slider.appendChild(element);	   					
+   					image = document.getElementsByClassName(cls)[i];
+
+   					image.appendChild(slide);
+   			}	
+   			
+
+
+			
+   			
+   			
+   			
+   		
+   	}
+   	function startSlide(slider){
+   			$(slider).slick({
+					'centerMode': true,
+					'centerPadding': '60px',
+  					'slidesToShow': 3,
+  					'infinite': false,
+  					'arrows' : true,
+  					'autoplay' : false,
+  					
+  					'speed': 200,
+  					'variableWidth': true
+				});
+   		}
+   	function checkBank(id){
+   		
+   		switch (id){
+    		case 'pko':
+    		ids = pko;
+    		break;
+
+    		case 'alior':
+    		ids = alior;
+    		break;
+
+    		case 'bps':
+    		ids = bps;
+    		break;
+
+    		case 'bph':
+    		ids = bph;
+    		break;
+
+    		case 'millenium':
+    		ids = millenium;
+    		break;
+
+    		case 'pekao':
+    		ids = pekao;
+    		break;
+
+    		case 'pocztowy':
+    		ids = pocztowy;
+    		break;
+
+    		case 'bzwbk':
+    		ids = bzwbk;
+    		break;
+
+    		case 'bgk':
+    		ids = bgk;
+    		break;
+
+    		case 'bgzbnp':
+    		ids = bgzbnp;
+    		break;
+    		case 'biz':
+    		ids = biz;
+    		break;
+    		case 'bos':
+    		ids = bos;
+    		break;
+    		case 'citi':
+    		ids = citi;
+    		break;
+    		case 'creditag':
+    		ids = creditag;
+    		break;
+    		case 'dbank':
+    		ids = dbank;
+    		break;
+    		case 'dnb':
+    		ids = dnb;
+    		break;
+    		case 'dzbank':
+    		ids = dzbank;
+    		break;
+    		case 'eurobank':
+    		ids = eurobank;
+    		break;
+    		case 'getin':
+    		ids = getin;
+    		break;
+    		case 'hsbc':
+    		ids = hsbc;
+    		break;
+    		case 'idea':
+    		ids = idea;
+    		break;
+    		case 'ing':
+    		ids = ing;
+    		break;
+    		case 'inteligo':
+    		ids = inteligo;
+    		break;
+    		case 'mbank':
+    		ids = mbank;
+    		break;
+    		case 'meritum':
+    		ids = meritum;
+    		break;
+    		case 'nest':
+    		ids = nest;
+    		break;
+    		case 'noble':
+    		ids = noble;
+    		break;
+    		case 'nordea':
+    		ids = nordea;
+    		break;
+    		case 'raiffeisen':
+    		ids = raiffeisen;
+    		break;
+    		default:
+    		ids = pko;
+    		
+    		}
+    		return ids;
+    	
+  	}
+  	
+   	fillSlides('in');
+   	fillSlides('out');	
+   	startSlide(slider);
+   	startSlide(slider1);
+	hour.innerHTML = time.hour;
+	$('.hup').click(function(){
+		var sendhour = time.hour + '.' +time.minutes;
+		sendhour = parseFloat(sendhour); 
+		slideDown(hour, 'hours');
+		checkHour(id, sendhour , id2);
+		
+	});
+	$('.hbo').click(function(){
+		var sendhour = time.hour + '.' +time.minutes;
+		sendhour = parseFloat(sendhour); 
+		slideUp(hour,'hours');
+		checkHour(id, sendhour , id2);
+	});
+	minutes.innerHTML = time.minutes;
+	$('.mup').click(function(){
+		var sendhour = time.hour + '.' +time.minutes;
+		sendhour = parseFloat(sendhour); 
+		slideDown(minutes,'minutes');
+
+		checkHour(id, sendhour , id2);
+		
+	});
+	$('.mbo').click(function(){
+		var sendhour = time.hour + '.' +time.minutes;
+		sendhour = parseFloat(sendhour); 
+
+		slideUp(minutes,'minutes');
+		checkHour(id, sendhour , id2);
+	});
+	$('#inslide').click(function(){
+		
+		$(modal).fadeIn('fast');
+
+	});
+
+	$('#outslide').click(function(){
+		$(modal1).fadeIn('fast');
+		
+	});
+
+
+	$('.imgslide').click(function(){
+		index = $( ".imgslide1" ).index( this );
+		var newid = banks[index-1];
+		var id = checkBank(newid);
+		var inlogo = document.getElementById('inlogo');
+		inslide.removeChild(inlogo);
+		clone = this.cloneNode(false);
+		clone.id = 'inlogo';
+		inslide.appendChild(clone);
+
+		$('.modal').fadeOut('slow');
+	
+	});
+	$('.imgslide1').click(function(){
+		index = $( ".imgslide1" ).index( this );
+		var newid = banks[index-1];
+		id2=checkBank(newid);
+		var outlogo = document.getElementById('outlogo');
+		outslide.removeChild(outlogo);
+		clone = this.cloneNode(false);
+		clone.id = 'outlogo';
+		outslide.appendChild(clone);
+
+		$('.modal1').fadeOut('slow');
+	
+	});
+
+		
+
+
+		
+   					
+</script>
+
+
+</body>
+</html>

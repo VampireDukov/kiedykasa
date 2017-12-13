@@ -1,0 +1,113 @@
+body, html{
+	
+	margin: 0;
+	padding: 0;
+	max-width: 1600px;
+	color: #000066;
+	text-align: center;
+	margin: auto;
+	
+}
+header{
+	background-image: url('../images/bank.jpg');
+	background-repeat: no-repeat;
+
+    background-size: cover;
+    overflow-:hidden;
+	height: 300px;
+	margin-top: -25px;
+	margin-bottom: 30px;
+	
+	color: white;
+
+    
+}
+h1{
+	font-family: sans-serif;
+	display: block;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	text-align: left;
+	background-color: rgba(0,0,0,0.8);
+	font-size: 2em;
+	font-weight: bold;
+	letter-spacing: 1px;
+}
+
+div.area{
+	display: flex;
+	margin: auto;
+	width: 1200px;
+	font-family: 'Alegreya Sans', sans-serif;
+
+}
+div.timer{
+	display: flex;
+	font-size: 2em;
+	margin: auto;
+}
+.target{
+	font-size: 1.4em;
+	text-decoration-line: underline;
+}
+div.block{
+
+	width: 150px;
+	height: 150px;
+	text-align: center;
+}
+.hum, .hup, .hbo, .mbo, span.hour{
+	display: block;
+	
+	
+}
+.arrows{
+	cursor: pointer;
+}
+span.hour{
+	
+	
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-size: 1.7em;
+	font-weight: bold;
+}
+img.slide, .slide1{
+	height: 200px;
+	z-index: 9999;
+}
+
+.modal, .modal1{
+	margin: auto;
+	position: absolute;
+	top: 35%;
+	width: 100%;
+	display: none;
+	background-color: rgb(255,255,255);
+	border-bottom-style: solid;
+	border-top-style: solid;
+	border-width: 2px;
+	border-color: #000066;
+
+}
+.slider, .slider1{
+	width: 80%;
+	margin: auto;
+	
+}
+div.logo{
+	width: 400px;
+	text-align: center;
+
+}
+img.logo{
+	height: 200px;
+	cursor: pointer;
+}
+.slides, .slides1{
+	margin-left: 10px;
+	z-index: 3;
+}
+
+
